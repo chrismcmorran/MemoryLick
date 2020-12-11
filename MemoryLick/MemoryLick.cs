@@ -157,7 +157,7 @@ namespace MemoryLick
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns>An int.</returns>
-        public float ReadInt(int address)
+        public int ReadInt(int address)
         {
             return BitConverter.ToInt32(Read(address, sizeof(int)));
         }
