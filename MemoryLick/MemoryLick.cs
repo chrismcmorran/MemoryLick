@@ -159,7 +159,7 @@ namespace MemoryLick
         /// <returns>An int.</returns>
         public int ReadInt(int address)
         {
-            return BitConverter.ToInt32(Read(address, sizeof(int)));
+            return BitConverter.ToInt32(Read(address, sizeof(int)), 0);
         }
         
         /// <summary>
@@ -169,7 +169,7 @@ namespace MemoryLick
         /// <returns>An int16.</returns>
         public float ReadInt16(int address)
         {
-            return BitConverter.ToInt16(Read(address, sizeof(Int16)));
+            return BitConverter.ToInt16(Read(address, sizeof(Int16)), 0);
         }
         
         /// <summary>
@@ -179,7 +179,7 @@ namespace MemoryLick
         /// <returns>A float.</returns>
         public float ReadFloat(int address)
         {
-            return BitConverter.ToSingle(Read(address, sizeof(float)));
+            return BitConverter.ToSingle(Read(address, sizeof(float)), 0);
         }
         
         /// <summary>
@@ -189,7 +189,7 @@ namespace MemoryLick
         /// <returns>A bool.</returns>
         public bool ReadBool(int address)
         {
-            return BitConverter.ToBoolean(Read(address, sizeof(bool)));
+            return BitConverter.ToBoolean(Read(address, sizeof(bool)), 0);
         }
         
         /// <summary>
