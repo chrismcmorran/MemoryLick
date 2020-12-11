@@ -120,6 +120,29 @@ namespace MemoryLick
         #region Read
         
         /// <summary>
+        /// Follows a chain of pointers and returns the last address in the chain.
+        /// </summary>
+        /// <param name="address">The base address.</param>
+        /// <param name="offsets">The offsets to follow.</param>
+        /// <returns>An int.</returns>
+        public int FollowPointer(int address, params int[] offsets)
+        {
+            var addr = address;
+            foreach (var offset in offsets)
+            {
+                addr = ReadInt(addr);
+                if (addr == 0)
+                {
+                    return 0;
+                }
+
+                addr += offset;
+            }
+
+            return addr;
+        }
+        
+        /// <summary>
         /// Reads a string starting from the provided address.
         /// </summary>
         /// <param name="address">The address.</param>
