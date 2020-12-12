@@ -195,7 +195,7 @@ namespace MemoryLick
         /// </summary>
         /// <param name="address">The address.</param>
         /// <returns>An int16.</returns>
-        public float ReadInt16(int address)
+        public Int16 ReadInt16(int address)
         {
             return BitConverter.ToInt16(Read(address, sizeof(Int16)), 0);
         }
