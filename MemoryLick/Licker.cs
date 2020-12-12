@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MemoryLick
 {
-    public class MemoryLick
+    public class Licker
     {
         private const int TamperAccess = (0x000F0000) | (0x00100000) | (0xFFFF);
         private int _defaultReadSize = 128;
@@ -19,7 +19,7 @@ namespace MemoryLick
         /// Creates a new MemoryLick.
         /// </summary>
         /// <param name="process">The process to use.</param>
-        public MemoryLick(Process process)
+        public Licker(Process process)
         {
             _process = process;
             _processHandle = Imports.OpenProcess(TamperAccess, 0, (uint) process.Id);
@@ -30,7 +30,7 @@ namespace MemoryLick
         /// </summary>
         /// <param name="process">The process.</param>
         /// <param name="defaultReadSize">The default number of bytes to read.</param>
-        public MemoryLick(Process process, int defaultReadSize) : this(process)
+        public Licker(Process process, int defaultReadSize) : this(process)
         {
             this._defaultReadSize = defaultReadSize;
         }
@@ -62,6 +62,15 @@ namespace MemoryLick
         public void WriteBytes(int address, byte[] data)
         {
             Write(address, data);
+        }
+        /// <summary>
+        /// Writes the provided byte to the address.
+        /// </summary>
+        /// <param name="address">The starting address.</param>
+        /// <param name="data">The byte.</param>
+        public void WriteByte(int address, byte data)
+        {
+            Write(address, new []{data});
         }
         
         /// <summary>
@@ -108,12 +117,8 @@ namespace MemoryLick
         private void Write(int address, byte[] data)
         {
             AllowPageTableTampering(address, data.Length);
-            var success = Imports.WriteProcessMemory(_processHandle, new IntPtr(address), data, data.Length, out var _);
+            Imports.WriteProcessMemory(_processHandle, new IntPtr(address), data, data.Length, out var _);
             RestorePageTablePermissions();
-            if (!success)
-            {
-                throw new Exception($"Failed to write memory ({address})");
-            }
         }
         #endregion
 
