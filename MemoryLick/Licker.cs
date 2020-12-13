@@ -9,6 +9,7 @@ namespace MemoryLick
     {
         private const int TamperAccess = (0x000F0000) | (0x00100000) | (0xFFFF);
         private int _defaultReadSize = 128;
+        private const int maxReadSize = 4096 * 4;
         private Process _process;
         private IntPtr _processHandle;
         private uint _oldProtectionValue;
@@ -155,10 +156,12 @@ namespace MemoryLick
         public string ReadString(int address)
         {
             bool terminated = false;
+            int allocated = 0;
             var builder = new StringBuilder(_defaultReadSize);
-            while (!terminated)
+            while (!terminated && allocated < maxReadSize)
             {
                 var bytes = Read(address, _defaultReadSize);
+                allocated += _defaultReadSize;
                 for (int i = 0; i < bytes.Length; i++)
                 {
                     if (bytes[i] != '\0')
