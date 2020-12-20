@@ -124,6 +124,36 @@ namespace MemoryLick
         #endregion
 
         #region Read
+
+        /// <summary>
+        /// Reads a UInt64 from the specified address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns>A UInt64.</returns>
+        public UInt64 ReadUInt64(int address)
+        {
+            return BitConverter.ToUInt64(Read(address, sizeof(UInt64)), 0);
+        }
+        
+        /// <summary>
+        /// Reads a UInt32 from the specified address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns>A UInt32.</returns>
+        public UInt32 ReadUInt32(int address)
+        {
+            return BitConverter.ToUInt32(Read(address, sizeof(UInt32)), 0);
+        }
+        
+        /// <summary>
+        /// Reads a UInt16 from the specified address.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns>A UInt16.</returns>
+        public UInt16 ReadUInt16(int address)
+        {
+            return BitConverter.ToUInt16(Read(address, sizeof(UInt16)), 0);
+        }
         
         /// <summary>
         /// Follows a chain of pointers and returns the last address in the chain.
