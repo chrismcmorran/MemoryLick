@@ -7,7 +7,7 @@
         <Authors>Christopher McMorran</Authors>
         <Description>A NuGet package for reading and writing memory from other processes.</Description>
         <RepositoryUrl>https://github.com/chrismcmorran/MemoryLick</RepositoryUrl>
-        <PackageVersion>1.0.6</PackageVersion>
+        <PackageVersion>1.0.7</PackageVersion>
     </PropertyGroup>
 
 </Project>
