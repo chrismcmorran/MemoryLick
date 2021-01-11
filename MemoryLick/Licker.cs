@@ -7,7 +7,7 @@ namespace MemoryLick
 {
     public class Licker
     {
-        private const int TamperAccess = (0x000F0000) | (0x00100000) | (0xFFFF);
+        
         private int _defaultReadSize = 128;
         private const int maxReadSize = 4096 * 4;
         private Process _process;
@@ -23,7 +23,7 @@ namespace MemoryLick
         public Licker(Process process)
         {
             _process = process;
-            _processHandle = Imports.OpenProcess(TamperAccess, 0, (uint) process.Id);
+            _processHandle = Imports.OpenProcess(Permission.Tamper, 0, (uint) process.Id);
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace MemoryLick
         {
             _oldProtectionAddress = new IntPtr(address);
             _oldProtectionSize = size;
-            Imports.VirtualProtectEx(_processHandle, new IntPtr(address), (UIntPtr) size, TamperAccess,
+            Imports.VirtualProtectEx(_processHandle, new IntPtr(address), (UIntPtr) size, Permission.Tamper,
                 out _oldProtectionValue);
         }
 
@@ -300,6 +300,24 @@ namespace MemoryLick
         {
             Imports.VirtualProtectEx(_processHandle, _oldProtectionAddress, (UIntPtr) _oldProtectionSize,
                 _oldProtectionValue, out var _);
+        }
+        
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void MakePageTableReadOnly(int address, int size)
+        {
+            _oldProtectionAddress = new IntPtr(address);
+            _oldProtectionSize = size;
+            Imports.VirtualProtectEx(_processHandle, new IntPtr(address), (UIntPtr) size, Permission.Tamper,
+                out _oldProtectionValue);
+        }
+        
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void SetPageTablePermissions(int address, int size, Permission permission)
+        {
+            _oldProtectionAddress = new IntPtr(address);
+            _oldProtectionSize = size;
+            Imports.VirtualProtectEx(_processHandle, new IntPtr(address), (UIntPtr) size, (uint) permission.Value,
+                out _oldProtectionValue);
         }
         #endregion
         
