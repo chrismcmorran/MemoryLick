@@ -287,7 +287,7 @@ namespace MemoryLick
 
         #region Permissions
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private void AllowPageTableTampering(int address, int size)
+        public void AllowPageTableTampering(int address, int size)
         {
             _oldProtectionAddress = new IntPtr(address);
             _oldProtectionSize = size;
@@ -296,7 +296,7 @@ namespace MemoryLick
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private void RestorePageTablePermissions()
+        public void RestorePageTablePermissions()
         {
             Imports.VirtualProtectEx(_processHandle, _oldProtectionAddress, (UIntPtr) _oldProtectionSize,
                 _oldProtectionValue, out var _);
