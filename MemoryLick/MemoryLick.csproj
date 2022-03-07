@@ -8,6 +8,7 @@
         <Description>A NuGet package for reading and writing memory from other processes.</Description>
         <RepositoryUrl>https://github.com/chrismcmorran/MemoryLick</RepositoryUrl>
         <PackageVersion>1.0.9</PackageVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
 </Project>
