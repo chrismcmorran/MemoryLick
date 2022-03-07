@@ -15,6 +15,8 @@ namespace MemoryLick
         private uint _oldProtectionValue;
         private int _oldProtectionSize;
         private IntPtr _oldProtectionAddress;
+        private bool _isWINE = false;
+        private int _wineProcessBaseAddress = 0x400000;
 
         /// <summary>
         /// Creates a new MemoryLick.
@@ -23,6 +25,10 @@ namespace MemoryLick
         public Licker(Process process)
         {
             _process = process;
+            if (process.ProcessName.Equals("wine", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _isWINE = true;
+            }
 #if OS_WINDOWS
             _processHandle = Imports.OpenProcess(Permission.Tamper, 0, (uint) process.Id);
 #endif
@@ -40,11 +46,12 @@ namespace MemoryLick
 
         /// <summary>
         /// Gets the base address of the process.
+        /// If running on wine then the base address is always 0x400000.
         /// </summary>
         /// <returns>An int32.</returns>
         public int BaseAddress()
         {
-            return _process.MainModule.BaseAddress.ToInt32();
+            return _isWINE ? _wineProcessBaseAddress : _process.MainModule.BaseAddress.ToInt32();
         }
 
         /// <summary>
