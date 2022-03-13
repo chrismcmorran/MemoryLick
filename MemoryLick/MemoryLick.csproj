@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>MemoryLick</Title>
         <Authors>Christopher McMorran</Authors>
@@ -9,6 +8,12 @@
         <RepositoryUrl>https://github.com/chrismcmorran/MemoryLick</RepositoryUrl>
         <PackageVersion>1.0.11</PackageVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latestmajor</LangVersion>
+        <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="LinuxProcessVMWrapper" Version="1.0.1" />
+    </ItemGroup>
 
 </Project>

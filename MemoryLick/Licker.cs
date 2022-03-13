@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using LinuxProcessVMWrapper;
 
 namespace MemoryLick
 {
@@ -134,27 +135,7 @@ namespace MemoryLick
             Imports.WriteProcessMemory(_processHandle, new IntPtr(address), data, data.Length, out var _);
             RestorePageTablePermissions();
 #endif
-#if OS_LINUX
-            this.Write<byte[]>(data, new IntPtr(address));
-#endif
-        }
-
-        public unsafe bool Write<T>(T value, IntPtr address) where T : unmanaged
-        {
-            var ptr = &value;
-            var size = Util.SizeOf<T>();
-            var localIo = new iovec
-            {
-                iov_base = ptr,
-                iov_len = size
-            };
-            var remoteIo = new iovec
-            {
-                iov_base = address.ToPointer(),
-                iov_len = size
-            };
-            var res = Imports.process_vm_writev(_process.Id, &localIo, 1, &remoteIo, 1, 0);
-            return res != -1;
+            _process.Write(address, data);
         }
 
         #endregion
@@ -312,39 +293,14 @@ namespace MemoryLick
         [MethodImpl(MethodImplOptions.Synchronized)]
         private byte[] Read(int address, int size)
         {
-            var bytes = new byte[size];
 #if OS_WINDOWS
+            var bytes = new byte[size];
             AllowPageTableTampering(address, size);
             Imports.ReadProcessMemory(_processHandle, new IntPtr(address), bytes, (uint) size, out var _);
             RestorePageTablePermissions();
             return bytes;
 #endif
-            for (int i = 0; i < size; i++)
-            {
-                this.Read<byte>(new IntPtr(address + i), out bytes[i]);
-            }
-
-            return bytes;
-        }
-
-        public unsafe bool Read<T>(IntPtr address, out T value) where T : unmanaged
-        {
-            var size = Util.SizeOf<T>();
-            var ptr = stackalloc byte[size];
-            var localIo = new iovec
-            {
-                iov_base = ptr,
-                iov_len = size
-            };
-            var remoteIo = new iovec
-            {
-                iov_base = address.ToPointer(),
-                iov_len = size
-            };
-
-            var res = Imports.process_vm_readv(_process.Id, &localIo, 1, &remoteIo, 1, 0);
-            value = *(T*) ptr;
-            return res != -1;
+            return _process.Read((IntPtr)address, size);
         }
 
         #endregion
