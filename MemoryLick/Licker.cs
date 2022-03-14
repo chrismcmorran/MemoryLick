@@ -138,6 +138,11 @@ namespace MemoryLick
             _process.Write(address, data);
         }
 
+        private void Write<T>(int address, T data)
+        {
+            
+        }
+
         #endregion
 
         #region Read
@@ -290,13 +295,36 @@ namespace MemoryLick
             return Read(address, count);
         }
 
-        public T Read<T>(IntPtr address, int count, Encoding encoding = null)
+        public T Read<T>(IntPtr address, int count = 0, Encoding encoding = null)
         {
             return Read<T>(address.ToInt64(), count, encoding);
         }
         
-        public T Read<T>(long address, int count, Encoding encoding = null)
+        public unsafe T Read<T>(void* address, int count = 0, Encoding encoding = null)
         {
+            return Read<T>((IntPtr)address, count, encoding);
+        }
+        
+        public T Read<T>(long address, int count = 0, Encoding encoding = null)
+        {
+            if (count == 0)
+            {
+                if (typeof(T) == typeof(string))
+                {
+                    count = _defaultReadSize;
+                }
+                else
+                {
+                    try
+                    {
+                        count = Marshal.SizeOf(default(T));
+                    }
+                    catch (Exception e)
+                    {
+                        count = 0;
+                    }
+                }
+            }
             byte[] bytes = Read(address, count);
             if (typeof(T) == typeof(byte[]))
             {
@@ -345,6 +373,10 @@ namespace MemoryLick
             else if (typeof(T) == typeof(double))
             {
                 return (T) (object) BitConverter.ToDouble(bytes);
+            }
+            else if (typeof(T) == typeof(long))
+            {
+                return (T) (object) BitConverter.ToInt64(bytes);
             }
 
             throw new Exception("Failed to convert to type " + typeof(T).Name);
