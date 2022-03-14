@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryLick", "MemoryLick\MemoryLick.csproj", "{90BD6678-CE82-44C1-AEEE-B0CC901B7D85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{58AC6C42-7750-457A-AFBF-EAB9874F646D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{90BD6678-CE82-44C1-AEEE-B0CC901B7D85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90BD6678-CE82-44C1-AEEE-B0CC901B7D85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90BD6678-CE82-44C1-AEEE-B0CC901B7D85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58AC6C42-7750-457A-AFBF-EAB9874F646D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58AC6C42-7750-457A-AFBF-EAB9874F646D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58AC6C42-7750-457A-AFBF-EAB9874F646D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58AC6C42-7750-457A-AFBF-EAB9874F646D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

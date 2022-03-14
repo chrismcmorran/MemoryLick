@@ -290,8 +290,68 @@ namespace MemoryLick
             return Read(address, count);
         }
 
+        public T Read<T>(IntPtr address, int count, Encoding encoding = null)
+        {
+            return Read<T>(address.ToInt64(), count, encoding);
+        }
+        
+        public T Read<T>(long address, int count, Encoding encoding = null)
+        {
+            byte[] bytes = Read(address, count);
+            if (typeof(T) == typeof(byte[]))
+            {
+                return (T) (object) bytes;
+            }
+            else if (typeof(T) == typeof(bool))
+            {
+                return (T) (object) BitConverter.ToBoolean(bytes);
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                return (T) (object) BitConverter.ToInt64(bytes);
+            }
+            else if (typeof(T) == typeof(Int32))
+            {
+                return (T) (object) BitConverter.ToInt32(bytes);
+            }
+            else if (typeof(T) == typeof(Int16))
+            {
+                return (T) (object) BitConverter.ToInt16(bytes);
+            }
+            else if (typeof(T) == typeof(UInt16))
+            {
+                return (T) (object) BitConverter.ToUInt16(bytes);
+            }
+            else if (typeof(T) == typeof(UInt32))
+            {
+                return (T) (object) BitConverter.ToUInt32(bytes);
+            }
+            else if (typeof(T) == typeof(UInt64))
+            {
+                return (T) (object) BitConverter.ToUInt64(bytes);
+            }
+            else if (typeof(T) == typeof(string))
+            {
+                return (T) (object) (encoding ?? Encoding.Default).GetString(bytes);
+            }
+            else if (typeof(T) == typeof(char))
+            {
+                return (T) (object) (encoding ?? Encoding.Default).GetString(bytes).ToCharArray()[0];
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                return (T) (object) BitConverter.ToSingle(bytes);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                return (T) (object) BitConverter.ToDouble(bytes);
+            }
+
+            throw new Exception("Failed to convert to type " + typeof(T).Name);
+        }
+
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private byte[] Read(int address, int size)
+        private byte[] Read(long address, int size)
         {
 #if OS_WINDOWS
             var bytes = new byte[size];
